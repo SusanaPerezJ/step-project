@@ -8,6 +8,7 @@
   margin-top: 20px;
 }
 
-#size {
-    width: 500px;
+.standard-size {
+  width: 500px;
 }
+
