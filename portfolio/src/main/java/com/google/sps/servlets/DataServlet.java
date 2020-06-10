@@ -33,7 +33,6 @@ public class DataServlet extends HttpServlet {
     String json = new Gson().toJson(comments);
     response.getWriter().println(json);
   }
-
  /**
   * Takes data from the request and populates arraylist
   */
