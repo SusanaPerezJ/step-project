@@ -32,8 +32,8 @@
     fetch('/data').then(response => response.json()).then((comments) => {
       const allComments = document.getElementById('comment-thread');
 	  comments.forEach((line) => {
-		allComments.appendChild(createSingleComment(line));
-	  });
+		allComments.appendChild(createSingleComment(line)); 
+      });
     });
  }
 /** 
@@ -45,9 +45,3 @@
    return liComment;
  }
 
-
-
-
- 
- 
- 
