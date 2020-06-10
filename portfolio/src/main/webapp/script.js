@@ -14,21 +14,40 @@
 
 
 /**
- * Add a random photo to the page.
+ * Adds a random fact to the page.
  **/
  function addRandomFact() {
      const facts = ['I am bilingual', 'I love plants', 'I have purple hair', 'My favorite color is blue'];
      //Choose a random fact
      const randomFact = facts[Math.floor(Math.random() * facts.length)];
      
-     //Add random fact to the page
+     //Add it to the page
      const factContainer = document.getElementById('fact-container');
      factContainer.innerText = randomFact;
  }
-
-//Fetches a message from the server and adds it to the DOM
-function getFetchedMessage(){
-    fetch('/data').then(response => response.text()).then ((message) => {
-      document.getElementById('message-container').innerText = message;
+/**
+ * Fetches the comments from the server
+ */
+ function getCommentThread(){
+    fetch('/data').then(response => response.json()).then((comments) => {
+      const allComments = document.getElementById('comment-thread');
+	  comments.forEach((line) => {
+		allComments.appendChild(createSingleComment(line));
+	  });
     });
-}
+ }
+/** 
+ * Creates an <li> element containing text
+ */
+ function createSingleComment(text) {
+   const liComment = document.createElement('li');
+   liComment.innerText = text;
+   return liComment;
+ }
+
+
+
+
+ 
+ 
+ 
