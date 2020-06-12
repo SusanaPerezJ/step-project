@@ -14,25 +14,29 @@
 
 package com.google.sps.servlets;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import com.google.gson.Gson;
+
+
 
 /** Servlet that returns thread of comments. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  public ArrayList<String> comments = new ArrayList<>();
-  private Gson gson = new Gson();
+  private static final ArrayList<String> comments = new ArrayList<>();
+  private static final Gson gson = new Gson();
+
 
   @Override 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
     String json = gson.toJson(comments);
     response.getWriter().print(json);
+    
   }
 
     /**
@@ -41,11 +45,12 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String text = getParameter(request, "comment-box", "");
+
     //Handles empty comments, does not add them to the thread
     if(validComment(text)){
         comments.add(text);
-        response.setContentType("text/html");
     }
+
     // Redirect back to the HTML page.
     response.sendRedirect("/index.html");
   }
@@ -65,3 +70,4 @@ public class DataServlet extends HttpServlet {
     return !comment.trim().isEmpty();
   }
 }
+
