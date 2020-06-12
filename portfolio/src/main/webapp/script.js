@@ -21,21 +21,28 @@
      //Choose a random fact
      const randomFact = facts[Math.floor(Math.random() * facts.length)];
      
-     //Add it to the page
+     //Add random fact to the page
      const factContainer = document.getElementById('fact-container');
      factContainer.innerText = randomFact;
  }
+
 /**
  * Fetches the comments from the server
  */
  function getCommentThread(){
-    fetch('/data').then(response => response.json()).then((comments) => {
+    fetch('/data')
+    .then(response => response.json())
+    .then((comments) => {
       const allComments = document.getElementById('comment-thread');
-	  comments.forEach((line) => {
+	    comments.forEach((line) => {
 		allComments.appendChild(createSingleComment(line)); 
       });
-    });
- }
+    })
+    .catch((error) => {
+     console.error('Error:', error);
+     });
+}
+
 /** 
  * Creates an <li> element containing text
  */
@@ -44,4 +51,3 @@
    liComment.innerText = text;
    return liComment;
  }
-
