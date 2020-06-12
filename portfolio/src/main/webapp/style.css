@@ -4,15 +4,20 @@
   width: 900px;
 }
 
-#greeting-container {
-  margin-top: 20px;
-}
-
 .standard-size {
   width: 500px;
 }
 
 .image-on-center{
   margin-left: 200px;
+}
+
+#comment-space {
+  background: #b7ccde;
+  width: 900px;
+}
+
+.space-between-elements {
+  padding-bottom: 30px;
 }
 
