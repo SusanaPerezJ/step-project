@@ -14,7 +14,7 @@
 
 
 /**
- * Add a random photo to the page.
+ * Adds a random fact to the page.
  **/
  function addRandomFact() {
      const facts = ['I am bilingual', 'I love plants', 'I have purple hair', 'My favorite color is blue'];
@@ -26,3 +26,28 @@
      factContainer.innerText = randomFact;
  }
 
+/**
+ * Fetches the comments from the server
+ */
+ function getCommentThread(){
+    fetch('/data')
+    .then(response => response.json())
+    .then((comments) => {
+      const allComments = document.getElementById('comment-thread');
+	    comments.forEach((line) => {
+		allComments.appendChild(createSingleComment(line)); 
+      });
+    })
+    .catch((error) => {
+     console.error('Error:', error);
+     });
+}
+
+/** 
+ * Creates an <li> element containing text
+ */
+ function createSingleComment(text) {
+   const liComment = document.createElement('li');
+   liComment.innerText = text;
+   return liComment;
+ }

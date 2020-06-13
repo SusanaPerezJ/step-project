@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="getCommentThread()">
     <div id="content">
-      <h1>Welcome to My Portfolio:)!</h1>
+      <h1>Welcome to my Portfolio:)!</h1>
       <p>My name is Susana Perez<p> 
       <h2>About me:</h2>
       <img src="images/download.png" alt="Front facing picture of a woman" class="standard-size image-on-center"/>
@@ -28,12 +28,21 @@
       <p>I was there for a just a couple of days but I had a lot of fun, this is me visiting Marina del Rey's pier.</p>
       <img src="images/beach.jpg" alt="Sunset at sea" class="standard-size image-on-center"/>
       <p>I took this picture on my last day in California, I really enjoyed seeing the waves and the orange color of the sky.</p>
-      <h2>Random Facts about me </h2> 
+      <h2>Random Facts about me</h2> 
       <p>Click this button to see a random fact about me:</p>
       <button onclick="addRandomFact()">Click Here!</button>
-      <div id="fact-container"></div>
+      <div id="fact-container" class="space-between-elements"></div>
       <a href="https://www.linkedin.com/in/susana-perez-juarez/">LinkedIn profile</a>
       <a href="https://github.com/SusanaPerezJ">GitHub profile</a>
+      <p>Leave a comment below!</p>
+      <form action="/data" method="POST" class="space-between-elements">  
+        <textarea name="comment-box" rows="6" cols="100"></textarea>
+        <button type="submit">Submit comment</button>   
+      </form> 
+      <p>Comments:</p>
+      <div id="comment-space">
+        <ul id="comment-thread"></ul>
+      </div> 
     </div>
   </body>
 </html>
