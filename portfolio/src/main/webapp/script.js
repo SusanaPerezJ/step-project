@@ -32,9 +32,9 @@
  function getCommentThread(){
     fetch('/data')
     .then(response => response.json())
-    .then((comments) => {
+    .then((commentList) => {
       const allComments = document.getElementById('comment-thread');
-	    comments.forEach((line) => {
+	    commentList.forEach((line) => {
 		allComments.appendChild(createSingleComment(line)); 
       });
     })
@@ -47,7 +47,12 @@
  * Creates an <li> element containing text
  */
  function createSingleComment(text) {
-   const liComment = document.createElement('li');
-   liComment.innerText = text;
-   return liComment;
+    const liComment = document.createElement('li');
+    liComment.className = 'comments';
+    
+    const titleElement = document.createElement('span');
+    titleElement.innerText = text.comment;
+
+    liComment.appendChild(titleElement);
+    return liComment;
  }
