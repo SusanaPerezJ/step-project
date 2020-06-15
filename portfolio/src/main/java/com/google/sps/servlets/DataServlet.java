@@ -14,43 +14,70 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
+import com.google.sps.data.Comments;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+
 
 
 
 /** Servlet that returns thread of comments. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  private static final ArrayList<String> comments = new ArrayList<>();
+  //private static final List<Comments> commentList = new ArrayList<>();
   private static final Gson gson = new Gson();
 
 
   @Override 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Query query = new Query("Comments").addSort("timestamp", SortDirection.DESCENDING);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    List<Comments> commentList = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+      long id = entity.getKey().getId();
+      String comment = (String) entity.getProperty("comment");
+      long timestamp = (long) entity.getProperty("timestamp");
+
+      Comments comments = new Comments(id, comment, timestamp);
+      commentList.add(comments);
+    }
+
     response.setContentType("application/json");
-    String json = gson.toJson(comments);
+    String json = gson.toJson(commentList);
     response.getWriter().print(json);
-    
   }
 
-    /**
+/**
   * Takes data from the request and populates arraylist
   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String text = getParameter(request, "comment-box", "");
+    String comment = request.getParameter("comment-box");
+    long timestamp = System.currentTimeMillis();
 
     //Handles empty comments, does not add them to the thread
-    if(validComment(text)){
-        comments.add(text);
-    }
+    if(validComment(comment)){
+        Entity commentEntity = new Entity("Comments");
+        commentEntity.setProperty("comment", comment);
+        commentEntity.setProperty("timestamp", timestamp);
 
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(commentEntity);  
+    }
     // Redirect back to the HTML page.
     response.sendRedirect("/index.html");
   }
@@ -69,5 +96,6 @@ public class DataServlet extends HttpServlet {
   public boolean validComment(String comment){
     return !comment.trim().isEmpty();
   }
+
 }
 
