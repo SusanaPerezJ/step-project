@@ -30,12 +30,14 @@
  * Fetches the comments from the server
  */
  function getCommentThread(){
-    fetch('/data')
-    .then(response => response.json())
+    var numComments = document.getElementById('max-comments');
+    fetch("/data?maxComments=" + numComments.value)
+    .then(response => response.json()) 
     .then((commentList) => {
       const allComments = document.getElementById('comment-thread');
+        allComments.innerHTML = "";
 	    commentList.forEach((line) => {
-		allComments.appendChild(createSingleComment(line)); 
+		allComments.appendChild(createSingleComment(line.comment)); 
       });
     })
     .catch((error) => {
@@ -51,7 +53,7 @@
     liComment.className = 'comments';
     
     const titleElement = document.createElement('span');
-    titleElement.innerText = text.comment;
+    titleElement.innerText = text;
 
     liComment.appendChild(titleElement);
     return liComment;
