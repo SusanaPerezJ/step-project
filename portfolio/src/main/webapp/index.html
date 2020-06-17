@@ -39,10 +39,15 @@
         <textarea name="comment-box" rows="6" cols="100"></textarea>
         <button type="submit">Submit comment</button>   
       </form> 
-      <p>Comments:</p>
+      <form class="space-between-elements" onsubmit="getCommentThread(); return false;">
+        <p>Show this many comments:</p>
+        <input type="number" name="max-comments" id="max-comments" min="1" max="20">
+        <button type="submit">Click here!</button>
+      </form>
       <div id="comment-space">
+        <p>Comments:</p>
         <ul id="comment-thread"></ul>
-      </div> 
+      </div>
     </div>
   </body>
 </html>
