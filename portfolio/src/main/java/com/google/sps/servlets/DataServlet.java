@@ -30,15 +30,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-
-
 /** Servlet that returns thread of comments. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  //private static final List<Comments> commentList = new ArrayList<>();
   private static final Gson gson = new Gson();
-
 
   @Override 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -46,16 +41,21 @@ public class DataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    List<Comments> commentList = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
-      long id = entity.getKey().getId();
-      String comment = (String) entity.getProperty("comment");
-      long timestamp = (long) entity.getProperty("timestamp");
-
-      Comments comments = new Comments(id, comment, timestamp);
-      commentList.add(comments);
+    int maxCommentNum = getMaxComments(request);
+    if(maxCommentNum == -1){
+        System.out.println("could not convert to int");
     }
 
+    final List<Comments> commentList = new ArrayList<Comments>();
+    for (Entity entity : results.asIterable()) {
+        if(commentList.size() < maxCommentNum){
+            long id = entity.getKey().getId();
+            String comment = (String) entity.getProperty("comment");
+            long timestamp = (long) entity.getProperty("timestamp");
+            Comments comments = new Comments(id, comment, timestamp);
+            commentList.add(comments);
+        }
+    }
     response.setContentType("application/json");
     String json = gson.toJson(commentList);
     response.getWriter().print(json);
@@ -94,8 +94,24 @@ public class DataServlet extends HttpServlet {
  * Validates a comment if it has at least a character that is not a white space
  */
   public boolean validComment(String comment){
-    return !comment.trim().isEmpty();
+      if(comment == null){
+          return false;
+      }
+      return !comment.trim().isEmpty(); 
   }
 
-}
+  public int getMaxComments(HttpServletRequest request){
+    // Get the input from the form.
+    String maxCommentsStr = request.getParameter("maxComments");
 
+    // Convert the input to an int.
+    int maxComments;
+    try {
+      maxComments = Integer.valueOf(maxCommentsStr);
+    } catch (NumberFormatException e) {
+      System.err.print("Could not convert to int: " + maxCommentsStr);
+      return -1;
+    }
+    return maxComments;
+  }
+}
