@@ -30,10 +30,12 @@
  * Fetches the comments from the server
  */
  function getCommentThread(){
-    fetch('/data')
-    .then(response => response.json())
+    var numComments = document.getElementById('max-comments');
+    fetch("/data?maxComments=" + numComments.value)
+    .then(response => response.json()) 
     .then((commentList) => {
-      const allComments = document.getElementById('comment-thread');
+        const allComments = document.getElementById('comment-thread');
+        allComments.innerHTML = "";
 	    commentList.forEach((line) => {
 		allComments.appendChild(createSingleComment(line)); 
       });
@@ -53,6 +55,23 @@
     const titleElement = document.createElement('span');
     titleElement.innerText = text.comment;
 
+    const deleteButtonElement = document.createElement('button');
+    deleteButtonElement.innerText = 'Delete';
+    deleteButtonElement.addEventListener('click', () => {
+      deleteComment(text);
+
+      // Remove the comment from the DOM.
+      liComment.remove();
+    });
+
     liComment.appendChild(titleElement);
+    liComment.appendChild(deleteButtonElement);
     return liComment;
  }
+
+ /** Tells the server to delete the comment. */
+ function deleteComment(comment) {
+  const params = new URLSearchParams();
+  params.append('id', comment.id);
+  fetch('/delete-data', {method: 'POST', body: params});
+}
