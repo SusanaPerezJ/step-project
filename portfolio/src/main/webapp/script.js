@@ -74,4 +74,23 @@
   const params = new URLSearchParams();
   params.append('id', comment.id);
   fetch('/delete-data', {method: 'POST', body: params});
+ }
+
+ /** Creates a map and adds it to the page. */
+function createMap() {
+    var myLatlng = new google.maps.LatLng(31.7678691, -106.5024917,20);
+    var mapOptions = {
+      zoom: 18,
+      center: myLatlng,
+      mapTypeId: 'hybrid'
+    };
+    const map = new google.maps.Map(
+      document.getElementById('map'),
+      mapOptions
+    );
+    map.setTilt(45);
+    var marker = new google.maps.Marker({
+    position: myLatlng,
+    map: map
+  });
 }
