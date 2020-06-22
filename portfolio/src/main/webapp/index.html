@@ -5,10 +5,11 @@
     <title>Susana's Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnV7zoQ2jnjdYeQO-aqU4yoLCwOjsJvNY"></script>
   </head>
-  <body onload="getCommentThread()">
+  <body onload="getCommentThread(); createMap();" >
     <div id="content">
-      <h1>Welcome to my Portfolio:)!</h1>
+      <h1>Welcome to my Portfolio:)!!</h1>
       <p>My name is Susana Perez<p> 
       <h2>About me:</h2>
       <img src="images/download.png" alt="Front facing picture of a woman" class="standard-size image-on-center"/>
@@ -32,6 +33,8 @@
       <p>Click this button to see a random fact about me:</p>
       <button onclick="addRandomFact()">Click Here!</button>
       <div id="fact-container" class="space-between-elements"></div>
+      <p>This is the CS building at my University!</p>
+      <div id="map" class="standard-size image-on-center"></div>
       <a href="https://www.linkedin.com/in/susana-perez-juarez/">LinkedIn profile</a>
       <a href="https://github.com/SusanaPerezJ">GitHub profile</a>
       <p>Leave a comment below!</p>
